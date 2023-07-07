@@ -15,9 +15,16 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected')
-    socket.on('chat message', (msg) => {
+    // socket.on('chat message', (msg) => {
+    //     console.log(msg)
+    //     io.emit('chat message', (`${socket.id} says: ` + msg))
+    // })
+    socket.on('chat message object', (msg) => {
         console.log(msg)
-        io.emit('chat message', (`${socket.id} says: ` + msg))
+        io.emit('chat message object', (msg))
+    })
+    socket.on('typing', (username) => {
+        io.emit('typing', `${username} is typing...`)
     })
     socket.on('disconnect', () => {
         console.log('a user disconnected')
