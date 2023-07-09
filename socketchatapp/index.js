@@ -14,16 +14,23 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected')
+    const room1 = ([...socket.rooms].slice(1,))
+    
     io.emit('chat message object', {
         author: "Server",
         content: `User ${socket.id} has connected`,
         id: "Server Message"
     })
+    socket.on('join room', (room) => {
+        // INPUT IS STRING
+        console.log(`a user connected to ${room}`)
+        socket.join(room)
+    })
     // RECEIVING A CHAT MESSAGE SIGNAL
     socket.on('chat message object', (msg) => {
         console.log(msg)
-        io.emit('chat message object', (msg))
+        
+        io.to(room1).emit('chat message object', (msg))
     })
     socket.on('typing', (username) => {
         io.emit('typing', `${username} is typing...`)

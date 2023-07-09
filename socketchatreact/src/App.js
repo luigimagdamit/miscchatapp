@@ -11,7 +11,7 @@ const socket = io('http://localhost:3000')
 const App = () => {
   return(
     <div>
-      <ChatRoom socket = {socket}/>
+      <ChatRoom socket = {socket} room = {"osa fan club"}/>
     </div>
   )
 }
