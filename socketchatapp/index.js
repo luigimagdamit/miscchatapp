@@ -5,7 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io")
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3001"
+        origin: "*"
       }
 })
 
@@ -15,10 +15,12 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected')
-    // socket.on('chat message', (msg) => {
-    //     console.log(msg)
-    //     io.emit('chat message', (`${socket.id} says: ` + msg))
-    // })
+    io.emit('chat message object', {
+        author: "Server",
+        content: `User ${socket.id} has connected`,
+        id: "Server Message"
+    })
+    // RECEIVING A CHAT MESSAGE SIGNAL
     socket.on('chat message object', (msg) => {
         console.log(msg)
         io.emit('chat message object', (msg))
