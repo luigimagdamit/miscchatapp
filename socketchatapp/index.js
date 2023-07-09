@@ -30,7 +30,11 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', () => {
         console.log('a user disconnected')
-        io.emit('chat message', (`${socket.id} user has disconnected`))
+        io.emit('chat message object', {
+            author: "Server",
+            content: `${socket.id} user has disconnected`,
+            id: "Server Message"
+        })
     })
 })
 
