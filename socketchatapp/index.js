@@ -14,9 +14,10 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+    // unique per socket connection but replace later with in message addresses
     const room1 = ([...socket.rooms].slice(1,))
     
-    io.emit('chat message object', {
+    io.to(room1).emit('chat message object', {
         author: "Server",
         content: `User ${socket.id} has connected`,
         id: "Server Message"
@@ -29,7 +30,6 @@ io.on('connection', (socket) => {
     // RECEIVING A CHAT MESSAGE SIGNAL
     socket.on('chat message object', (msg) => {
         console.log(msg)
-        
         io.to(room1).emit('chat message object', (msg))
     })
     socket.on('typing', (username) => {
