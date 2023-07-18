@@ -27,10 +27,24 @@ io.on('connection', (socket) => {
         console.log(`a user connected to ${room}`)
         socket.join(room)
     })
+    socket.on('leave room', (room) => {
+        console.log(`a user disconnected from ${room}`)
+        const serverMsg = {
+            author: "Server",
+            content: `User ${socket.id} has disconnected from ${room}`,
+            id: "Server Message",
+            channel: "#main",
+            room: room
+        }
+        console.log(serverMsg)
+        io.to(room).emit('chat message object', serverMsg)
+        socket.leave(room)
+        
+    })
     // RECEIVING A CHAT MESSAGE SIGNAL
     socket.on('chat message object', (msg) => {
         console.log(msg)
-        io.to(room1).emit('chat message object', (msg))
+        io.to(msg.room).emit('chat message object', (msg))
     })
     socket.on('typing', (username) => {
         io.emit('typing', `${username} is typing...`)

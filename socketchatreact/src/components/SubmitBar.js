@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const SubmitBar = ({author, socket, currentChannel}) => {
+const SubmitBar = ({author, socket, currentChannel, currentRoom}) => {
     const [newMessage, setNewMessage] = useState("")
     const handleMessageChange = (event) => {
       setNewMessage(event.target.value)
@@ -11,7 +11,8 @@ const SubmitBar = ({author, socket, currentChannel}) => {
         author: author,
         id: socket.id,
         content: newMessage,
-        channel: currentChannel
+        channel: currentChannel,
+        room: currentRoom
       }
       event.preventDefault()
       socket.emit('chat message object', messageObj)

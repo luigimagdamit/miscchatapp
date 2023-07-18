@@ -1,6 +1,6 @@
 import Message from "./Message"
 
-const Messages = ({messages, currentChannel}) => {
+const Messages = ({messages, currentChannel, currentRoom}) => {
     return (
       <div className="messages">
         {messages.map(message => {
@@ -8,7 +8,8 @@ const Messages = ({messages, currentChannel}) => {
             author: message.author, 
             content: message.content, 
             id: message.id,
-            channel: message.channel
+            channel: message.channel,
+            room: message.room
           }
           return message.channel === currentChannel ? <Message metadata = {metadata}/> : null
         })}

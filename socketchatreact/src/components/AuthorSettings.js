@@ -12,6 +12,7 @@ const AuthorSettings = ({author, setAuthor}) => {
     }
     return (
       <div>
+        <h2>Change Nickname</h2>
         <form onSubmit={handleAuthorSubmit}>
             <input 
                 value = {newAuthor} 
@@ -19,7 +20,7 @@ const AuthorSettings = ({author, setAuthor}) => {
             />
           <button type='submit'>Name Change</button>
         </form>
-        <h1>username: {author}</h1>
+        <h3>Current nickname: {author}</h3>
       </div>
     )
   }

@@ -17,13 +17,41 @@ const ChannelMenu = ({channelList, setChannel}) => {
     channelList.map(channelEntry => {return <ChannelButton channelName={channelEntry} setChannel={setChannel}/>})
   )
 }
+const RoomForm = ({socket, setRoomID, roomID}) => {
+  const [newRoom, setNewRoom] = useState("")
+  const handleRoomChange = (event) => {
+    setNewRoom(event.target.value)
+    // socket.emit('typing', author)
+  }
+  const connectToRoom = (event) => {
+    event.preventDefault()
+    socket.emit('leave room', roomID)
+    setRoomID(newRoom)
+    socket.emit('join room', newRoom)
+    
+    setNewRoom("")
+  }
+  return (
+    <div>
+      <h2>Connnect to a different room</h2>
+      <form onSubmit={connectToRoom}>
+    <input 
+      value = {newRoom} 
+      onChange={handleRoomChange}
+    />
+    <button type = "submit">send</button>
+  </form>
+    </div>
+  
+  )
+}
 const ChatRoom = ({socket, room}) => {
     const [isConnected, setIsConnected] = useState(socket.connected)
     const [messages, setMessages] = useState([])
     const [author, setAuthor] = useState("Anonymous")
     const [roomID, setRoomID] = useState(room) // return type string
     const [channel, setChannel] = useState("#main")
-    const [channelList, setChannelList] = useState(["#main", "#misc", "#nsfw"])
+    const [channelList, setChannelList] = useState(["#main", "#misc", "#other"])
     const [isTyping, setIsTyping] = useState("")
     useEffect(() => {
       const onConnect = () => {
@@ -47,13 +75,14 @@ const ChatRoom = ({socket, room}) => {
     return (
       <div className="App">
         <AuthorSettings author = {author} setAuthor={setAuthor}/> 
-        
-        <h1>Room: {room}</h1>
+        <RoomForm socket = {socket} setRoomID = {setRoomID} roomID = {roomID}/>
+        <h1>Room: {roomID}</h1>
         <h2>Current Channel: {channel}</h2>
+        
         <ChannelMenu channelList={channelList} setChannel={setChannel}/>
         <h2>{isTyping}</h2>
-        <Messages messages = {messages} currentChannel={channel}/>
-        <SubmitBar author = {author} socket={socket} currentChannel={channel}/>
+        <Messages messages = {messages} currentChannel={channel} currentRoom={roomID}/>
+        <SubmitBar author = {author} socket={socket} currentChannel={channel} currentRoom = {roomID}/>
       </div>
     );
   }
